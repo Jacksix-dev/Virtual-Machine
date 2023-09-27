@@ -12,7 +12,12 @@
   "author": "Facundo Gasco <facundogasco@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@ethereumjs/trie": "^6.0.0",
+    "@ethereumjs/util": "^9.0.0",
     "@ethersproject/bytes": "^5.7.0",
+    "abstract-level": "^1.0.3",
+    "level": "^8.0.0",
+    "memory-level": "^1.0.0",
     "typescript": "^5.2.2"
   },
   "devDependencies": {

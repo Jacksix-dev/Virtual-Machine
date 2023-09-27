@@ -5,6 +5,7 @@ import { InvalidBytecode, InvalidProgramCounterIndex, UnknownOpcode } from "./er
 import { connected } from "process";
 import Opcodes from "../../opcodes";
 import Instruction from "../instruction";
+import { Trie } from "@ethereumjs/trie";
 
 class ExecutionContext{
 private readonly code: Uint8Array;
@@ -13,8 +14,9 @@ public memory:Memory;
 private pc: number;
 private stopped: boolean;
 public output: bigint = BigInt(0)
+public storage:Trie
 
-constructor(code: string){
+constructor(code: string,storage:Trie){
     if(!isHexString(code)||code.length %2 !==0)
      throw new InvalidBytecode()
     this.code=arrayify(code);
@@ -22,7 +24,7 @@ constructor(code: string){
     this.memory= new Memory()
     this.pc=0;
     this.stopped = false;
-    
+    this.storage = storage;
     }   
 
     public stop(): void{
@@ -40,8 +42,9 @@ constructor(code: string){
                 this.stack.print()
                 console.log('')
             }
-            console.log('output:/t',hexlify(this.output))
-    }
+            console.log('output:\t',hexlify(this.output))
+            console.log('Root:\t',hexlify(this.storage.root()))
+        }
 
 private fetchInstruction(): Instruction{
     if(this.pc>=this.code.length) return Opcodes[0]

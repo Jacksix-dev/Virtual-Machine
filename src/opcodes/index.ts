@@ -1,6 +1,7 @@
 import { arrayify, hexlify } from "@ethersproject/bytes";
 import ExecutionContext from "../classes/execution";
 import Instruction from "../classes/instruction";
+import { off } from "process";
 
 const Opcodes: {
   0: Instruction;
@@ -75,8 +76,14 @@ const Opcodes: {
   0x50: new Instruction(0x50, "POP",(ctx: ExecutionContext)=>{
     ctx.stack.pop();
   }),
-  0x51: new Instruction(0x51, "MLOAD"),
-  0x52: new Instruction(0x52, "MSTORE"),
+  0x51: new Instruction(0x51, "MLOAD", (ctx: ExecutionContext)=>{
+    const offset = ctx.stack.pop();
+    ctx.stack.push(ctx.memory.load(offset))
+  }),
+  0x52: new Instruction(0x52, "MSTORE",(ctx: ExecutionContext)=>{
+    const [offset,value] = [ctx.stack.pop(),ctx.stack.pop()]
+    ctx.memory.store(offset,value)
+  }),
   0x54: new Instruction(0x54, "SLOAD"),
   0x55: new Instruction(0x55, "SSTORE"),
   0x56: new Instruction(0x56, "JUMP"),
