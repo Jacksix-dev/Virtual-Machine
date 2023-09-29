@@ -16,6 +16,8 @@
     "@ethereumjs/util": "^9.0.0",
     "@ethersproject/bytes": "^5.7.0",
     "abstract-level": "^1.0.3",
+    "bigint-buffer": "^1.1.5",
+    "ethereumjs-util": "^7.1.5",
     "level": "^8.0.0",
     "memory-level": "^1.0.0",
     "typescript": "^5.2.2"

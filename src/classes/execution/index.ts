@@ -31,11 +31,11 @@ constructor(code: string,storage:Trie){
         this.stopped=true;
     }
 
-    public run(){
+    public async run(){
         while(!this.stopped){
             const currentPc = this.pc
             const instruction = this.fetchInstruction()
-            instruction.execute(this)
+            await instruction.execute(this)
             console.info(`${instruction.name}\t @pc=${currentPc}`);
 
                 this.memory.print();

@@ -3,6 +3,8 @@ import ExecutionContext from "../classes/execution";
 import Instruction from "../classes/instruction";
 import { off } from "process";
 
+import { bigIntToBuffer, } from "ethereumjs-util/dist/bytes";
+
 const Opcodes: {
   0: Instruction;
   [key: number]: Instruction | undefined;
@@ -84,8 +86,14 @@ const Opcodes: {
     const [offset,value] = [ctx.stack.pop(),ctx.stack.pop()]
     ctx.memory.store(offset,value)
   }),
-  0x54: new Instruction(0x54, "SLOAD"),
-  0x55: new Instruction(0x55, "SSTORE"),
+  0x54: new Instruction(0x54, "SLOAD",(ctx:ExecutionContext)=>{
+    const key = ctx.stack.pop()
+    const value = await ctx.storage.get(toBuffer(key));
+    ctx.stack.push(value ? toBuffer(value) : BigInt(0))
+  }),
+  0x55: new Instruction(0x55, "SSTORE",(ctx:ExecutionContext )=>{
+
+  }),
   0x56: new Instruction(0x56, "JUMP"),
   0x57: new Instruction(0x57, "JUMPI"),
   0x5b: new Instruction(0x5b, "JUMPDEST"),
@@ -291,3 +299,4 @@ const Opcodes: {
 };
 
 export default Opcodes; 
+
